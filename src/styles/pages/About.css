@@ -1,0 +1,30 @@
+.about-page {
+  width: 100%;
+}
+
+.about-page h1 {
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-content p {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .about-page h1 {
+    font-size: 3rem;
+  }
+}
+

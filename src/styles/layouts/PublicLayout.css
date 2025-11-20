@@ -1,0 +1,26 @@
+.public-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.public-main {
+  flex: 1;
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .public-main {
+    padding: 3rem 2rem;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .public-main {
+    padding: 4rem 3rem;
+  }
+}
+

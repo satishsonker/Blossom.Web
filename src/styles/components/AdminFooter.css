@@ -1,0 +1,25 @@
+.admin-footer {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 1rem;
+  margin-top: auto;
+}
+
+.admin-footer-container {
+  max-width: 100%;
+  text-align: center;
+}
+
+.admin-footer-container p {
+  color: var(--text-light);
+  font-size: 0.875rem;
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .admin-footer {
+    margin-left: 250px;
+    padding: 1.5rem 2rem;
+  }
+}
+

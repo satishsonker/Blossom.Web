@@ -1,0 +1,30 @@
+.settings-page {
+  width: 100%;
+}
+
+.settings-page h1 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+}
+
+.settings-content {
+  background-color: var(--bg-primary);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.settings-content p {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .settings-page h1 {
+    font-size: 2.5rem;
+  }
+}
+
