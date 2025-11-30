@@ -1,22 +1,24 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
-import DataGrid from '../../components/datagrid/DataGrid';
 import UserFormModal from '../../components/modals/UserFormModal';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import apiService from '../../services/api.service';
 import API_ENDPOINTS from '../../config/api.endpoints';
 import '../../styles/pages/admin/Users.css';
+import TableView from '../../components/tables/TableView';
+import { headerFormat } from './../../utils/tableHeaderFormat';
 
 const Users = () => {
   const navigate = useNavigate();
+  const [pageNo, setPageNo] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [refreshKey, setRefreshKey] = useState(0);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [actionType, setActionType] = useState(null); // 'edit', 'delete', 'activate', 'deactivate', 'resetPassword'
-
   const breadcrumbItems = [
     { label: 'Dashboard', to: '/admin/dashboard', icon: '📊' },
     { label: 'Users', icon: '👥' },
@@ -74,9 +76,18 @@ const Users = () => {
   };
 
   // Handle activate user
-  const handleActivateUser = async (user) => {
+  const handleActivateUser = async (user, active) => {
     try {
-      await apiService.put(API_ENDPOINTS.USERS.ACTIVATE(user.id), {});
+      await apiService.post(API_ENDPOINTS.USERS.ACTIVATE(user.id, active), {});
+      refreshData();
+    } catch (error) {
+      console.error('Error activating user:', error);
+    }
+  };
+
+  const verifyEmail = async (user) => {
+    try {
+      await apiService.post(API_ENDPOINTS.USERS.VERIFY_EMAIL(user.id), {});
       refreshData();
     } catch (error) {
       console.error('Error activating user:', error);
@@ -109,212 +120,125 @@ const Users = () => {
     }
   };
 
-  // DataGrid columns configuration
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      sortable: true,
-      align: 'center',
-      width: 80,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      sortable: true,
-      filterable: true,
-      icon: '👤',
-      iconPosition: 'before',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      sortable: true,
-      filterable: true,
-      type: 'link',
-      render: (value) => value,
-      href: (value) => `mailto:${value}`,
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      sortable: true,
-      filterable: true,
-      type: 'badge',
-      render: (value) => value.toUpperCase(),
-      badgeClass: (value) => {
-        if (value === 'admin') return 'badge-error';
-        if (value === 'moderator') return 'badge-warning';
-        return 'badge-info';
+
+
+  useEffect(() => {
+    apiService.get(API_ENDPOINTS.USERS.LIST).then(response => {
+      tableOptionTemplet.data = response.data.data
+      tableOptionTemplet.totalRecords = response.data.totalCount;
+      setTableOption({ ...tableOptionTemplet });
+    }).catch(error => {
+      console.error('Error fetching users data:', error);
+    })
+  }, [refreshKey])
+
+  const tableOptionTemplet = {
+    headers: headerFormat.userList,
+    showPagination: false,
+    showTableTop: false,
+    showFooter: true,
+    data: [],
+    totalRecords: 0,
+    pageSize: pageSize,
+    pageNo: pageNo,
+    setPageNo: setPageNo,
+    setPageSize: setPageSize,
+    actions: {
+      showView: true,
+      showPrint: false,
+      showDelete: true,
+      showEdit: false,
+      delete: {
+        handler: (dataId, data, index) => {
+          handleDeleteClick(data)
+        },
+        title: "Delete User",
+        icon: 'bi bi-trash-fill',
+        showModel: false
       },
-      align: 'center',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      sortable: true,
-      filterable: true,
-      type: 'badge',
-      render: (value) => value.toUpperCase(),
-      badgeClass: (value) => {
-        if (value === 'active') return 'badge-success';
-        if (value === 'inactive') return 'badge-warning';
-        if (value === 'suspended') return 'badge-error';
-        return 'badge-inactive';
+
+      edit: {
+        handler: (dataId, data) => {
+          handleEditUser(data)
+        }
       },
-      align: 'center',
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
-      filterable: true,
-    },
-    {
-      title: 'Created',
-      dataIndex: 'createdAt',
-      sortable: true,
-      render: (value) => {
-        if (!value) return '-';
-        const date = new Date(value);
-        return date.toLocaleDateString();
-      },
-    },
-  ];
+      buttons: [
+        {
+          title: "Reset Password",
+          icon: 'bi bi-key-fill',
+          handler: (dataId, data) => {
+            handleResetPasswordClick(data)
+          }
+        },
+        {
+          title: "Activate",
+          icon: 'bi bi-check-circle-fill text-success',
+          showModel: false,
+          handler: (dataId, data) => {
+            handleActivateUser(data, true)
+          },
+          show: (data, datalength) => {
+            return !data.isActive;
+          }
+        },
+        {
+          title: "Deactivate",
+          icon: 'bi bi-x-circle-fill text-danger',
+          showModel: false,
+          handler: (dataId, data) => {
+            handleActivateUser(data, false)
+          },
+          show: (data, datalength) => {
+            return data.isActive;
+          }
+        },
+        {
+          title: "Verify Email",
+          icon: 'bi bi-x-circle-fill text-danger',
+          showModel: false,
+          handler: (dataId, data) => {
+            verifyEmail(data)
+          },
+          show: (data, datalength) => {
+            return data.isEmailVerified;
+          }
+        },
+        {
+          title: "Reset Password",
+          icon: 'bi bi-x-circle-fill text-danger',
+          showModel: false,
+          handler: (dataId, data) => {
+            verifyEmail(data)
+          },
+          show: (data, datalength) => {
+            return data.isEmailVerified;
+          }
+        },
+        {
+          title: "Verify Email",
+          icon: 'bi bi-x-circle-fill text-danger',
+          showModel: false,
+          handler: (dataId, data) => {
+            changePassword(data)
+          },
+          show: (data, datalength) => {
+            return data.isEmailVerified;
+          }
+        }
+      ],
+      view: {
+        handler: () => { navigate('/admin/orders/view/' + selectedUser?.id) },
+        title: "View user profile"
+      }
+    }
+  }
 
-  // Action column configuration
-  const actionColumn = {
-    title: 'Actions',
-    render: (row) => (
-      <div className="user-actions">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleEditUser(row);
-          }}
-          className="action-btn action-edit"
-          title="Edit User"
-        >
-          ✏️
-        </button>
-        {row.status === 'active' ? (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeactivateUser(row);
-            }}
-            className="action-btn action-deactivate"
-            title="Deactivate User"
-          >
-            ⏸️
-          </button>
-        ) : (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleActivateUser(row);
-            }}
-            className="action-btn action-activate"
-            title="Activate User"
-          >
-            ▶️
-          </button>
-        )}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleResetPasswordClick(row);
-          }}
-          className="action-btn action-reset"
-          title="Reset Password"
-        >
-          🔑
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteClick(row);
-          }}
-          className="action-btn action-delete"
-          title="Delete User"
-        >
-          🗑️
-        </button>
-      </div>
-    ),
-  };
-
-  // Header component
-  const header = ({ totalRecords }) => (
-    <div className="users-header">
-      <div>
-        <h1>User Management</h1>
-        <p className="users-subtitle">Total Users: {totalRecords}</p>
-      </div>
-      <button onClick={handleCreateUser} className="btn-primary btn-create-user">
-        ➕ Create New User
-      </button>
-    </div>
-  );
-
-  // Footer component
-  const footer = ({ data }) => {
-    const activeCount = data.filter(item => item.status === 'active').length;
-    const inactiveCount = data.filter(item => item.status === 'inactive').length;
-    const adminCount = data.filter(item => item.role === 'admin').length;
-
-    return (
-      <div className="users-footer">
-        <div className="footer-stat">
-          <span className="stat-label">Total:</span>
-          <span className="stat-value">{data.length}</span>
-        </div>
-        <div className="footer-stat">
-          <span className="stat-label">Active:</span>
-          <span className="stat-value stat-success">{activeCount}</span>
-        </div>
-        <div className="footer-stat">
-          <span className="stat-label">Inactive:</span>
-          <span className="stat-value stat-warning">{inactiveCount}</span>
-        </div>
-        <div className="footer-stat">
-          <span className="stat-label">Admins:</span>
-          <span className="stat-value stat-info">{adminCount}</span>
-        </div>
-      </div>
-    );
-  };
-
-  // Get row class name based on status
-  const getRowClassName = (row) => {
-    if (row.status === 'active') return 'row-success';
-    if (row.status === 'inactive') return 'row-warning';
-    if (row.status === 'suspended') return 'row-error';
-    return '';
-  };
-
-  // Custom data source function to include refresh key
-  const dataSource = useCallback((params) => {
-    return `${API_ENDPOINTS.USERS.LIST}?${params.toString()}&_refresh=${refreshKey}`;
-  }, [refreshKey]);
-
+  const [tableOption, setTableOption] = useState(tableOptionTemplet);
   return (
     <div className="users-page">
       <Breadcrumb items={breadcrumbItems} />
+      <TableView option={tableOption}></TableView>
       
-      <DataGrid
-        key={refreshKey}
-        columns={columns}
-        dataSource={dataSource}
-        actionColumn={actionColumn}
-        header={header}
-        footer={footer}
-        rowKey="id"
-        pageSize={25}
-        getRowClassName={getRowClassName}
-        stickyHeader={true}
-        stickyActionColumn={true}
-      />
-
       {/* Create/Edit User Modal */}
       <UserFormModal
         isOpen={isFormModalOpen}
@@ -337,7 +261,7 @@ const Users = () => {
         }}
         onConfirm={handleConfirmDelete}
         title="Delete User"
-        message={`Are you sure you want to delete user "${selectedUser?.name}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete user "${selectedUser?.email}"? This action cannot be undone.`}
         confirmText="Delete"
         cancelText="Cancel"
         type="danger"

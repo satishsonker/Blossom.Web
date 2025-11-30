@@ -10,16 +10,16 @@ const API_ENDPOINTS = {
 
   // User endpoints
   USERS: {
-    LIST: '/users',
+    LIST: '/users/GetAll',
     GET_BY_ID: (id) => `/users/${id}`,
     REGISTER: '/users/register',
     UPDATE: (id) => `/users/${id}`,
-    DELETE: (id) => `/users/${id}`,
+    DELETE: (id) => `/users/delete/${id}`,
     BULK_DELETE: '/users/bulk-delete',
-    ACTIVATE: (id) => `/users/${id}/activate`,
-    DEACTIVATE: (id) => `/users/${id}/deactivate`,
-    RESET_PASSWORD: (id) => `/users/${id}/reset-password`,
-    CHANGE_PASSWORD: (id) => `/users/${id}/change-password`,
+    ACTIVATE: (userId,active) => `/users/${userId}/activate/${active}`,
+    VERIFY_EMAIL: (userId) => `/users/${userId}/verify/email`,
+    RESET_PASSWORD: (id) => `/users/resetPassword`,
+    CHANGE_PASSWORD: (id) => `/users/changePassword`,
   },
 
   // Product endpoints

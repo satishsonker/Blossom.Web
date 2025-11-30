@@ -1,12 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+require('dotenv').config();
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   
+  // Get environment variables
+  const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com/api/v1';
+  
   return {
     entry: './src/index.js',
+    devtool: 'source-map',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js',
@@ -36,16 +41,14 @@ module.exports = (env, argv) => {
         template: './public/index.html',
       }),
       new webpack.DefinePlugin({
-        'process.env.REACT_APP_API_BASE_URL': JSON.stringify(
-          process.env.REACT_APP_API_BASE_URL || 'https://api.example.com/api/v1'
-        ),
+        'process.env.REACT_APP_API_BASE_URL': JSON.stringify(REACT_APP_API_BASE_URL),
       }),
     ],
     resolve: {
       extensions: ['.js', '.jsx'],
     },
     devServer: {
-      port: 3000,
+      port: 3001,
       hot: true,
       historyApiFallback: {
         index: '/',

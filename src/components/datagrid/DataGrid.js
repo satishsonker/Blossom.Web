@@ -38,7 +38,7 @@ const DataGrid = ({
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.append('page', currentPage);
+      params.append('pageNumber', currentPage);
       params.append('pageSize', pageSizeState);
       
       if (sortConfig.field) {

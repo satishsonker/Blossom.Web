@@ -1,0 +1,98 @@
+import React, { useRef } from 'react'
+import { common } from '../../utils/common';
+
+export default function TableTop({ handlePageSizeChange, searchHandler, sortBy, setSortBy, searchPlaceHolderText = "Enter minimum 3 charactor", showPaging = true, width = "auto", options, showSorting = true }) {
+    options = common.defaultIfEmpty(options, {});
+    options.setSearchTerm = common.defaultIfEmpty(options.setSearchTerm, () => { });
+    options.searchTerm = common.defaultIfEmpty(options.searchTerm, '');
+    const inputRef = useRef(null);
+    const debounce = (wait) => {
+        let timeoutId;
+
+        return (...args) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                searchHandler(...args);
+            }, wait);
+        };
+    };
+    const debouncedSearch = useRef(
+        debounce(3000) // wait time in ms
+    ).current;
+    const handleTextChange = (e) => {
+
+        var { value, name } = e.target;
+        if (name === 'search') {
+            value=value.replace('+', '')
+            options.setSearchTerm(value);
+            if (value?.trim().length === 0 || value?.trim().length > 3) {
+               debouncedSearch(value);
+            }
+            if (value?.trim().length === 0) {
+                options.setPageNo(1);
+                options.setPageSize(20);
+            }
+            return;
+        }
+
+        setSortBy({ ...sortBy, [name]: value });
+    }
+    return (
+        <div className="row mb-4">
+            <div className="col-4">
+                {showPaging && <div className="dataTables_length" id="example_length">
+                    <label style={{ fontWeight: "normal", textAlign: "left", whiteSpace: "nowrap", fontSize: '12px' }}><span>Show </span>
+                        <select onChange={e => handlePageSizeChange(e)} style={{ width: "auto", display: "inline-block", fontSize: '12px' }} name="example_length" aria-controls="example" className="form-select form-select-sm">
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="75">75</option>
+                            <option value="100">100</option>
+                            <option value="150">150</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                        <span> Records </span>
+                    </label>
+                </div>
+                }
+            </div>
+            {showSorting && <div className='col-4'>
+                <label style={{ fontWeight: "normal", textAlign: "left", whiteSpace: "nowrap", fontSize: '12px' }}>Sort by </label>
+                <select name='column' onChange={e => handleTextChange(e)} style={{ width: "auto", display: "inline-block", fontSize: '12px' }} className="form-select form-select-sm">
+                    <option value="default">Default</option>
+                    {
+                        options?.headers?.map((res, ind) => {
+                            return <option key={ind} value={res?.prop}>{res?.name}</option>
+                        })
+                    }
+                </select>
+                <i style={{ fontSize: '22px' }} onClick={e => handleTextChange({
+                    target: {
+                        name: 'type',
+                        value: (sortBy?.type === 'desc' ? 'asc' : 'desc')
+                    }
+                })} className={sortBy?.type == 'asc' ? "bi bi-sort-down mx-2 text-success" : 'bi bi-sort-up mx-2 text-danger'}></i>
+            </div>}
+            <div className={showSorting ? "col-4" : 'col-8'}>
+                <div id="example_filter" className="dataTables_filter" style={{ textAlign: "right" }}>
+                    <label style={{ fontWeight: "normal", textAlign: "right", whiteSpace: "nowrap", width: width, fontSize: '12px' }}>Search:
+                        <input
+                            style={{ marginLeft: "0.5em", display: "inline-block", width: width, fontSize: '12px' }}
+                            placeholder={searchPlaceHolderText}
+                            type="search"
+                             ref={inputRef}
+                            name='search'
+                            onChange={e => handleTextChange(e)}
+                            className="form-control form-control-sm table-search"
+                            aria-controls="example" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    )
+}

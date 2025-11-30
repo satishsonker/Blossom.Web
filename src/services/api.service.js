@@ -147,7 +147,7 @@ const makeRequest = async (url, options = {}, showToastOnSuccess = true, customS
     } else if (body instanceof FormData) {
       config.body = body;
     }
-debugger;
+    
     const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, config);
     clearTimeout(timeoutId);
 
