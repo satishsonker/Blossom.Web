@@ -2,7 +2,7 @@
 const API_ENDPOINTS = {
   // Auth endpoints
   AUTH: {
-    LOGIN: '/auth/login',
+    LOGIN: '/users/login',
     LOGOUT: '/auth/logout',
     REFRESH_TOKEN: '/auth/refresh',
     REGISTER: '/auth/register',

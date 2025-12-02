@@ -6,7 +6,7 @@ const headerFormat = {
     {
       name: "Profile Image", prop: "profilePicturePath",
       action: {
-        footerText: "Total",
+        footerText: "",
         showTooltip: false
       },
       customColumn: (data, header) => {
@@ -17,7 +17,7 @@ const headerFormat = {
     },
     {
       name: "Username", prop: "username",
-      action: { footerText: "Total", showTooltip: false }
+      action: { footerText: "", showTooltip: false }
     },
     {
       name: "Email", prop: "email",

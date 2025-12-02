@@ -16,10 +16,33 @@
   align-items: center;
 }
 
-.logo h1 {
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.logo-text {
   font-size: 1.5rem;
   color: var(--primary-color);
   font-weight: 700;
+  margin: 0;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .logo-text {
+    display: block;
+  }
 }
 
 .mobile-menu-toggle {
@@ -77,6 +100,32 @@
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
+}
+
+.user-icon-wrapper {
+  position: relative;
+}
+
+.user-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.user-icon-btn:hover {
+  background-color: var(--bg-secondary);
+}
+
+.user-icon-btn svg {
+  width: 24px;
+  height: 24px;
 }
 
 .theme-toggle {
@@ -273,14 +322,8 @@
     gap: 1rem;
   }
   
-  .user-menu {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
-  }
-  
-  .admin-link {
-    padding: 0.5rem 1rem;
+  .user-icon-btn {
+    padding: 0.5rem;
   }
 }
 

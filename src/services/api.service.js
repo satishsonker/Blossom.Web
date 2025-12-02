@@ -1,6 +1,7 @@
 import API_CONFIG from '../config/api.config';
 import MESSAGES from '../config/messages';
 
+ 
 // Global loading state management
 let activeRequests = 0;
 let loadingCallbacks = [];
@@ -54,7 +55,7 @@ const showToast = (type, message, details = []) => {
 // Get default headers
 const getHeaders = (customHeaders = {}, includeContentType = true) => {
   const headers = {
-    ...customHeaders,
+    ...customHeaders
   };
 
   if (includeContentType && !headers['Content-Type'] && !(customHeaders instanceof FormData)) {
@@ -62,9 +63,9 @@ const getHeaders = (customHeaders = {}, includeContentType = true) => {
   }
 
   // Add auth token if available
-  const token = localStorage.getItem('authToken');
+  const token =  localStorage.getItem('token');
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers['Authorization'] = `Bearer ${token?.token}`;
   }
 
   return headers;
