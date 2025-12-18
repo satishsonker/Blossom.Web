@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import Inputbox from '../../common/Inputbox';
 import '../../../styles/components/auth/AuthPopup.css';
 
-export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwitchToForgotPassword }) {
-  const { login, googleLogin, isAdmin } = useAuth();
-  const navigate = useNavigate();
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [loginError, setLoginError] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwitchToGoogleSignup }) {
+  const { signup, googleLogin, isAdmin } = useAuth();
+  const [signupForm, setSignupForm] = useState({ 
+    name: '', 
+    email: '', 
+    password: '', 
+    confirmPassword: '' 
+  });
+  const [signupError, setSignupError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleCallback = async (response) => {
@@ -18,12 +20,9 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
     setIsLoading(false);
 
     if (result?.success) {
-      setShowLoginModal(false);
-      if (isAdmin()) {
-        navigate('/admin/dashboard');
-      }
+      setShowSignupModal(false);
     } else {
-      setLoginError(result?.error || 'Google login failed');
+      setSignupError(result?.error || 'Google signup failed');
     }
   };
 
@@ -44,13 +43,13 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
             callback: handleGoogleCallback,
           });
 
-          const buttonContainer = document.getElementById('google-signin-button');
+          const buttonContainer = document.getElementById('google-signup-button');
           if (buttonContainer) {
             window.google.accounts.id.renderButton(buttonContainer, {
               theme: 'outline',
               size: 'large',
               width: '100%',
-              text: 'signin_with',
+              text: 'signup_with',
             });
           }
         }
@@ -61,60 +60,88 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
 
   const handleTextChange = (e) => {
     const { name, value } = e.target;
-    setLoginForm({ ...loginForm, [name]: value });
-    setLoginError('');
+    setSignupForm({ ...signupForm, [name]: value });
+    setSignupError('');
   };
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setLoginError('');
+    setSignupError('');
     setIsLoading(true);
 
-    if (!loginForm.email || !loginForm.password) {
-      setLoginError('Please fill in all fields');
+    // Validation
+    if (!signupForm.name || !signupForm.email || !signupForm.password || !signupForm.confirmPassword) {
+      setSignupError('Please fill in all fields');
       setIsLoading(false);
       return;
     }
 
-    const result = await login(loginForm.email, loginForm.password, rememberMe);
+    if (signupForm.password !== signupForm.confirmPassword) {
+      setSignupError('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    if (signupForm.password.length < 6) {
+      setSignupError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    const result = await signup({
+      name: signupForm.name,
+      email: signupForm.email,
+      password: signupForm.password,
+    });
+
     setIsLoading(false);
 
     if (result?.success) {
-      setShowLoginModal(false);
-      setLoginForm({ email: '', password: '' });
-      if (isAdmin()) {
-        navigate('/admin/dashboard');
-      }
+      alert(result.message || 'Registration successful! Please login.');
+      setShowSignupModal(false);
+      if (onSwitchToLogin) onSwitchToLogin();
     } else {
-      setLoginError(result?.error || 'Login failed');
+      setSignupError(result?.error || 'Registration failed');
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
+    <div className="modal-overlay" onClick={() => setShowSignupModal(false)}>
       <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
-          <h2>Welcome Back</h2>
-          <p className="auth-subtitle">Sign in to your account</p>
+          <h2>Create Account</h2>
+          <p className="auth-subtitle">Sign up to get started</p>
         </div>
 
-        <form onSubmit={handleLogin} className="auth-form">
-          {loginError && (
+        <form onSubmit={handleSignup} className="auth-form">
+          {signupError && (
             <div className="auth-error-message">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none"/>
                 <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" strokeWidth="2"/>
                 <line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" strokeWidth="2"/>
               </svg>
-              <span>{loginError}</span>
+              <span>{signupError}</span>
             </div>
           )}
 
           <div className="form-group">
             <Inputbox
+              type="text"
+              name="name"
+              value={signupForm.name}
+              isRequired={true}
+              onChangeHandler={handleTextChange}
+              labelText="Full Name"
+              placeholder="Enter your full name"
+            />
+          </div>
+
+          <div className="form-group">
+            <Inputbox
               type="email"
               name="email"
-              value={loginForm.email}
+              value={signupForm.email}
               isRequired={true}
               onChangeHandler={handleTextChange}
               labelText="Email"
@@ -126,33 +153,24 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
             <Inputbox
               type="password"
               name="password"
-              value={loginForm.password}
+              value={signupForm.password}
               isRequired={true}
               onChangeHandler={handleTextChange}
               labelText="Password"
-              placeholder="Enter your password"
+              placeholder="Enter your password (min 6 characters)"
             />
           </div>
 
-          <div className="auth-form-options">
-            <label className="remember-me-checkbox">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              <span>Remember me for 30 days</span>
-            </label>
-            <button
-              type="button"
-              className="forgot-password-link"
-              onClick={() => {
-                setShowLoginModal(false);
-                if (onSwitchToForgotPassword) onSwitchToForgotPassword();
-              }}
-            >
-              Forgot password?
-            </button>
+          <div className="form-group">
+            <Inputbox
+              type="password"
+              name="confirmPassword"
+              value={signupForm.confirmPassword}
+              isRequired={true}
+              onChangeHandler={handleTextChange}
+              labelText="Confirm Password"
+              placeholder="Confirm your password"
+            />
           </div>
 
           <button
@@ -160,7 +178,7 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
             className="auth-primary-btn"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
 
@@ -170,22 +188,22 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
 
         {process.env.REACT_APP_GOOGLE_CLIENT_ID && process.env.REACT_APP_GOOGLE_CLIENT_ID !== '' && (
           <div className="auth-social-login">
-            <div id="google-signin-button" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}></div>
+            <div id="google-signup-button" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}></div>
           </div>
         )}
 
         <div className="auth-footer">
           <p>
-            Don't have an account?{' '}
+            Already have an account?{' '}
             <button
               type="button"
               className="auth-link-btn"
               onClick={() => {
-                setShowLoginModal(false);
-                if (onSwitchToSignup) onSwitchToSignup();
+                setShowSignupModal(false);
+                if (onSwitchToLogin) onSwitchToLogin();
               }}
             >
-              Sign up
+              Sign in
             </button>
           </p>
         </div>
@@ -193,3 +211,4 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
     </div>
   );
 }
+

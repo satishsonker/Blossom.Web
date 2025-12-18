@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import '../../styles/components/PublicHeader.css';
-import LoginPopup from '../popups/auth/loginPopup';
+import LoginPopup from '../popups/auth/LoginPopup';
+import SignupPopup from '../popups/auth/SignupPopup';
+import ForgotPasswordPopup from '../popups/auth/ForgotPasswordPopup';
 import UserMenuPopup from '../popups/UserMenuPopup';
 
 const PublicHeader = () => {
@@ -11,6 +13,8 @@ const PublicHeader = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
@@ -35,10 +39,13 @@ const PublicHeader = () => {
       <div className="header-container">
         <Link to="/" className="logo">
           <div className="logo-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="2" fill="none"/>
-              <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" fill="none"/>
-            </svg>
+            <img 
+              src="/assets/images/icons/icon-96x96.png" 
+              alt="Blossom Logo" 
+              className="logo-image"
+              width="32" 
+              height="32"
+            />
           </div>
           <h1 className="logo-text">Blossom</h1>
         </Link>
@@ -79,7 +86,25 @@ const PublicHeader = () => {
           </div>
         </nav>
       </div>
-      {showLoginModal && <LoginPopup setShowLoginModal={setShowLoginModal}></LoginPopup>}
+      {showLoginModal && (
+        <LoginPopup 
+          setShowLoginModal={setShowLoginModal}
+          onSwitchToSignup={() => setShowSignupModal(true)}
+          onSwitchToForgotPassword={() => setShowForgotPasswordModal(true)}
+        />
+      )}
+      {showSignupModal && (
+        <SignupPopup 
+          setShowSignupModal={setShowSignupModal}
+          onSwitchToLogin={() => setShowLoginModal(true)}
+        />
+      )}
+      {showForgotPasswordModal && (
+        <ForgotPasswordPopup 
+          setShowForgotPasswordModal={setShowForgotPasswordModal}
+          onSwitchToLogin={() => setShowLoginModal(true)}
+        />
+      )}
     </header>
   );
 };

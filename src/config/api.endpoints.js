@@ -6,6 +6,10 @@ const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',
     REFRESH_TOKEN: '/auth/refresh',
     REGISTER: '/auth/register',
+    GOOGLE_LOGIN: '/auth/google',
+    FORGOT_PASSWORD: '/users/forgotPassword',
+    RESET_PASSWORD: '/users/resetPassword',
+    CHANGE_PASSWORD: '/users/changePassword',
   },
 
   // User endpoints

@@ -26,8 +26,45 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = async (username, password) => {
+  const login = async (username, password, rememberMe = false) => {
     return await apiService.post(API_ENDPOINTS.AUTH.LOGIN, { username, password })
+      .then(response => {
+        var userData = getJwtClaims(response.data?.data?.token);
+        if(userData?.roles && typeof userData.roles==='string'){ 
+          userData.roles =JSON.parse(userData.roles);
+        }
+        setUser(userData);
+        const tokenData = response.data?.data;
+        localStorage.setItem('token', JSON.stringify(tokenData));
+        
+        // If remember me is checked, set expiration to 30 days
+        if (rememberMe) {
+          const expirationDate = new Date();
+          expirationDate.setDate(expirationDate.getDate() + 30);
+          localStorage.setItem('tokenExpiration', expirationDate.toISOString());
+        } else {
+          localStorage.removeItem('tokenExpiration');
+        }
+        
+        return { success: true, user: userData };
+      })
+      .catch(error => {
+        return { success: false, error: error.response?.data?.message || 'Login failed' };
+      });
+  };
+
+  const signup = async (userData) => {
+    return await apiService.post(API_ENDPOINTS.USERS.REGISTER, userData)
+      .then(response => {
+        return { success: true, message: response.data?.message || 'Registration successful' };
+      })
+      .catch(error => {
+        return { success: false, error: error.response?.data?.message || 'Registration failed' };
+      });
+  };
+
+  const googleLogin = async (googleToken) => {
+    return await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_LOGIN, { token: googleToken })
       .then(response => {
         var userData = getJwtClaims(response.data?.data?.token);
         setUser(userData);
@@ -35,7 +72,40 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: userData };
       })
       .catch(error => {
-        return { success: false, error: error.response?.data?.message || 'Login failed' };
+        return { success: false, error: error.response?.data?.message || 'Google login failed' };
+      });
+  };
+
+  const forgotPassword = async (email) => {
+    return await apiService.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, { email })
+      .then(response => {
+        return { success: true, message: response.data?.message || 'Password reset email sent' };
+      })
+      .catch(error => {
+        return { success: false, error: error.response?.data?.message || 'Failed to send reset email' };
+      });
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    return await apiService.post(API_ENDPOINTS.AUTH.RESET_PASSWORD, { token, newPassword })
+      .then(response => {
+        return { success: true, message: response.data?.message || 'Password reset successful' };
+      })
+      .catch(error => {
+        return { success: false, error: error.response?.data?.message || 'Password reset failed' };
+      });
+  };
+
+  const changePassword = async (currentPassword, newPassword) => {
+    return await apiService.post(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, { 
+      currentPassword, 
+      newPassword 
+    })
+      .then(response => {
+        return { success: true, message: response.data?.message || 'Password changed successfully' };
+      })
+      .catch(error => {
+        return { success: false, error: error.response?.data?.message || 'Password change failed' };
       });
   };
 
@@ -47,6 +117,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('tokenExpiration');
   };
 
   const isAdmin = () => {
@@ -58,7 +130,18 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, getToken }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      signup,
+      googleLogin,
+      forgotPassword,
+      resetPassword,
+      changePassword,
+      logout, 
+      isAdmin, 
+      getToken 
+    }}>
       {children}
     </AuthContext.Provider>
   );

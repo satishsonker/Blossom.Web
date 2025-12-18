@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import ChangePasswordPopup from './auth/ChangePasswordPopup';
 import '../../styles/components/UserMenuPopup.css';
 
 const UserMenuPopup = ({ isOpen, onClose, onLoginClick }) => {
   const { user, logout, isAdmin } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   if (!isOpen) return null;
 
@@ -37,7 +39,7 @@ const UserMenuPopup = ({ isOpen, onClose, onLoginClick }) => {
               <div className="user-info">
                 <div className="user-name">{user.name || 'User'}</div>
                 <div className="user-email">{user.email || user.username || ''}</div>
-                <div className="user-role">{user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User'}</div>
+                <div className="user-role">{user.roles ? (user.roles.find(x=>x.RoleCode==='ADMIN')!==null?"Admin" : user.roles[0].RoleCode):"Guest"}</div>
               </div>
             </div>
             <div className="user-menu-divider"></div>
@@ -68,6 +70,20 @@ const UserMenuPopup = ({ isOpen, onClose, onLoginClick }) => {
                 )}
               </svg>
               <span>Switch to {theme === 'light' ? 'Dark' : 'Light'} Theme</span>
+            </button>
+            <div className="user-menu-divider"></div>
+            <button 
+              className="user-menu-item" 
+              onClick={() => {
+                onClose();
+                setShowChangePassword(true);
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" strokeWidth="2" fill="none"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" fill="none"/>
+              </svg>
+              <span>Change Password</span>
             </button>
             <div className="user-menu-divider"></div>
             <button className="user-menu-item logout-item" onClick={handleLogout}>
@@ -119,6 +135,9 @@ const UserMenuPopup = ({ isOpen, onClose, onLoginClick }) => {
           </>
         )}
       </div>
+      {showChangePassword && (
+        <ChangePasswordPopup setShowChangePasswordModal={setShowChangePassword} />
+      )}
     </>
   );
 };

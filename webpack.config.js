@@ -8,6 +8,7 @@ module.exports = (env, argv) => {
   
   // Get environment variables
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.example.com/api/v1';
+  const REACT_APP_GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
   
   return {
     entry: './src/index.js',
@@ -42,6 +43,11 @@ module.exports = (env, argv) => {
       }),
       new webpack.DefinePlugin({
         'process.env.REACT_APP_API_BASE_URL': JSON.stringify(REACT_APP_API_BASE_URL),
+        'process.env.REACT_APP_GOOGLE_CLIENT_ID': JSON.stringify(REACT_APP_GOOGLE_CLIENT_ID),
+        'process.env': JSON.stringify({
+          REACT_APP_API_BASE_URL: REACT_APP_API_BASE_URL,
+          REACT_APP_GOOGLE_CLIENT_ID: REACT_APP_GOOGLE_CLIENT_ID,
+        }),
       }),
     ],
     resolve: {

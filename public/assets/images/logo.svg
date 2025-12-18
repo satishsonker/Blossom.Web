@@ -1,0 +1,45 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light blue background -->
+  <rect width="200" height="200" fill="#87CEEB"/>
+  
+  <!-- Letter B -->
+  <path d="M 40 30 L 40 170 M 40 30 Q 40 30 60 30 Q 75 30 75 50 Q 75 70 60 70 Q 75 70 75 90 Q 75 110 60 110 Q 40 110 40 130 L 40 170" 
+        stroke="#000000" 
+        stroke-width="8" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Green vine wrapping around B -->
+  <path d="M 30 160 Q 25 150 30 140 Q 35 130 40 120 Q 45 110 50 100 Q 55 90 50 80 Q 45 70 40 60 Q 35 50 30 40 Q 25 30 30 20" 
+        stroke="#228B22" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Vine crossing behind B -->
+  <path d="M 50 100 Q 45 90 50 80 Q 55 70 60 60" 
+        stroke="#228B22" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round"/>
+  
+  <!-- Upper leaf -->
+  <ellipse cx="35" cy="50" rx="8" ry="12" fill="#228B22" transform="rotate(-30 35 50)"/>
+  
+  <!-- Middle leaf -->
+  <ellipse cx="35" cy="90" rx="10" ry="15" fill="#228B22" transform="rotate(-20 35 90)"/>
+  
+  <!-- Top pink flower -->
+  <circle cx="30" cy="20" r="12" fill="#FF69B4"/>
+  <circle cx="30" cy="20" r="8" fill="#FF1493"/>
+  
+  <!-- Bottom pink flower -->
+  <circle cx="30" cy="180" r="12" fill="#FF69B4"/>
+  <circle cx="30" cy="180" r="8" fill="#FF1493"/>
+  
+  <!-- Flower stems connecting to vine -->
+  <line x1="30" y1="20" x2="30" y2="30" stroke="#228B22" stroke-width="4" stroke-linecap="round"/>
+  <line x1="30" y1="180" x2="30" y2="160" stroke="#228B22" stroke-width="4" stroke-linecap="round"/>
+</svg>
+
