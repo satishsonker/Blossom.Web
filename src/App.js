@@ -14,6 +14,8 @@ import Contact from './pages/public/Contact';
 import Dashboard from './pages/admin/Dashboard';
 import Users from './pages/admin/Users';
 import Products from './pages/admin/Products';
+import FileUpload from './pages/admin/FileUpload';
+import MasterData from './pages/admin/MasterData';
 import Settings from './pages/admin/Settings';
 import './styles/App.css';
 
@@ -58,6 +60,8 @@ function App() {
                           <Route path="dashboard" element={<Dashboard />} />
                           <Route path="users" element={<Users />} />
                           <Route path="products" element={<Products />} />
+                          <Route path="file-upload" element={<FileUpload />} />
+                          <Route path="master-data" element={<MasterData />} />
                           <Route path="settings" element={<Settings />} />
                           <Route index element={<Navigate to="/admin/dashboard" replace />} />
                         </Route>

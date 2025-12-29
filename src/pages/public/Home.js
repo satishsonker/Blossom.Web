@@ -6,7 +6,7 @@ const Home = () => {
     <div className="home-page">
       <div className="container">
         <section className="hero">
-          <h1>Welcome to Blossom</h1>
+          <h1>Welcome to Blooming Buds Learning Center</h1>
           <p className="hero-subtitle">
             Your trusted partner for excellence and innovation
           </p>

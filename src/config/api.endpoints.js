@@ -49,6 +49,16 @@ const API_ENDPOINTS = {
     GET: '/settings',
     UPDATE: '/settings',
   },
+
+  // Master Data endpoints
+  MASTER_DATA: {
+    LIST: '/master-data',
+    GET_BY_ID: (id) => `/master-data/${id}`,
+    CREATE: '/master-data',
+    UPDATE: (id) => `/master-data/${id}`,
+    DELETE: (id) => `/master-data/${id}`,
+    BULK_DELETE: '/master-data/bulk-delete',
+  },
 };
 
 export default API_ENDPOINTS;

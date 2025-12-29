@@ -9,7 +9,7 @@ const Contact = () => {
         <div className="contact-content">
           <div className="contact-info">
             <h2>Get in Touch</h2>
-            <p>Email: info@blossom.com</p>
+            <p>Email: info@BloomingBuds.com</p>
             <p>Phone: +1 (555) 123-4567</p>
             <p>Address: 123 Main Street, City, State 12345</p>
           </div>

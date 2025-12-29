@@ -63,9 +63,21 @@ const getHeaders = (customHeaders = {}, includeContentType = true) => {
   }
 
   // Add auth token if available
-  const token =  localStorage.getItem('token');
-  if (token) {
-    headers['Authorization'] = `Bearer ${token?.token}`;
+  try {
+    const tokenData = localStorage.getItem('token');
+    if (tokenData) {
+      const parsedToken = JSON.parse(tokenData);
+      const token = parsedToken?.token || parsedToken;
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+  } catch (error) {
+    // If token parsing fails, try to use it as a string
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
   }
 
   return headers;

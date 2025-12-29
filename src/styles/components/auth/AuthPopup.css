@@ -1,5 +1,20 @@
 /* Mobile-first Auth Popup Styles */
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
 .auth-modal-content {
   background-color: var(--bg-primary);
   border-radius: 16px;
@@ -10,6 +25,7 @@
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s ease-out;
+  position: relative;
 }
 
 @keyframes slideUp {

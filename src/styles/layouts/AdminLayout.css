@@ -9,7 +9,7 @@
   display: flex;
   flex: 1;
   position: relative;
-  margin-top: 60px; /* Header height */
+  margin-top: 70px; /* Header height */
 }
 
 .admin-main {

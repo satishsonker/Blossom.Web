@@ -41,13 +41,13 @@ const PublicHeader = () => {
           <div className="logo-icon">
             <img 
               src="/assets/images/icons/icon-96x96.png" 
-              alt="Blossom Logo" 
+              alt="Blooming Buds Logo" 
               className="logo-image"
               width="32" 
               height="32"
             />
           </div>
-          <h1 className="logo-text">Blossom</h1>
+          <h1 className="logo-text">Blooming Buds</h1>
         </Link>
 
         <button

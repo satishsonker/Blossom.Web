@@ -75,6 +75,48 @@
   scroll-behavior: smooth;
 }
 
+/* Theme-Aware Scrollbar for DataGrid */
+.datagrid-table-wrapper::-webkit-scrollbar,
+.datagrid-scrollable::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.datagrid-table-wrapper::-webkit-scrollbar-track,
+.datagrid-scrollable::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 5px;
+}
+
+.datagrid-table-wrapper::-webkit-scrollbar-thumb,
+.datagrid-scrollable::-webkit-scrollbar-thumb {
+  background: var(--tertiary-color);
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+  transition: background 0.3s ease;
+}
+
+.datagrid-table-wrapper::-webkit-scrollbar-thumb:hover,
+.datagrid-scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+.datagrid-table-wrapper::-webkit-scrollbar-corner,
+.datagrid-scrollable::-webkit-scrollbar-corner {
+  background: var(--bg-secondary);
+}
+
+.datagrid-table-wrapper,
+.datagrid-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tertiary-color) var(--bg-secondary);
+}
+
+.datagrid-table-wrapper:hover,
+.datagrid-scrollable:hover {
+  scrollbar-color: var(--primary-color) var(--bg-secondary);
+}
+
 .datagrid-table {
   width: 100%;
   border-collapse: collapse;

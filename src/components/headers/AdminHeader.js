@@ -44,13 +44,13 @@ const AdminHeader = ({ toggleSidebar, sidebarOpen }) => {
           <div className="logo-icon">
             <img 
               src="/assets/images/logo.svg" 
-              alt="Blossom Logo" 
+              alt="Blooming Buds Learning Center Logo" 
               className="logo-image"
               width="28" 
               height="28"
             />
           </div>
-          <h1 className="admin-title">Blossom</h1>
+          <h1 className="admin-title">Blooming Buds Learning Center</h1>
         </Link>
         
         <div className="admin-header-actions">

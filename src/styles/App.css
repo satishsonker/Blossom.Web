@@ -1,70 +1,80 @@
-/* CSS Variables for Professional Color Scheme */
+/* CSS Variables for Professional 3-Color Theme */
 :root[data-theme="light"] {
-  /* Primary Colors - Professional Blue */
-  --primary-color: #2563eb;
-  --primary-dark: #1e40af;
-  --primary-light: #3b82f6;
+  /* Primary Color - Deep Slate Blue (Professional, Trustworthy) */
+  --primary-color: #2c3e50;
+  --primary-dark: #1a252f;
+  --primary-light: #34495e;
   
-  /* Secondary Colors */
-  --secondary-color: #64748b;
-  --secondary-dark: #475569;
-  --secondary-light: #94a3b8;
+  /* Secondary Color - Teal/Emerald (Modern, Fresh Accent) */
+  --secondary-color: #16a085;
+  --secondary-dark: #138d75;
+  --secondary-light: #1abc9c;
+  
+  /* Tertiary Color - Muted Gray (Neutral Balance) */
+  --tertiary-color: #95a5a6;
+  --tertiary-dark: #7f8c8d;
+  --tertiary-light: #b2babb;
   
   /* Background Colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #ecf0f1;
   
   /* Text Colors */
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-light: #64748b;
+  --text-primary: #2c3e50;
+  --text-secondary: #5d6d7e;
+  --text-light: #95a5a6;
   
   /* Border & Shadow */
-  --border-color: #e2e8f0;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --border-color: #e5e7e9;
+  --shadow-sm: 0 1px 3px 0 rgba(44, 62, 80, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(44, 62, 80, 0.12);
+  --shadow-lg: 0 10px 15px -3px rgba(44, 62, 80, 0.15);
   
   /* Status Colors */
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
+  --success: #16a085;
+  --error: #e74c3c;
+  --warning: #f39c12;
+  --info: #3498db;
 }
 
 :root[data-theme="dark"] {
-  /* Primary Colors */
-  --primary-color: #3b82f6;
-  --primary-dark: #2563eb;
-  --primary-light: #60a5fa;
+  /* Primary Color - Deep Slate Blue */
+  --primary-color: #34495e;
+  --primary-dark: #2c3e50;
+  --primary-light: #4a5f7a;
   
-  /* Secondary Colors */
-  --secondary-color: #94a3b8;
-  --secondary-dark: #64748b;
-  --secondary-light: #cbd5e1;
+  /* Secondary Color - Teal/Emerald */
+  --secondary-color: #1abc9c;
+  --secondary-dark: #16a085;
+  --secondary-light: #48c9b0;
+  
+  /* Tertiary Color - Muted Gray */
+  --tertiary-color: #7f8c8d;
+  --tertiary-dark: #5d6d7e;
+  --tertiary-light: #b2babb;
   
   /* Background Colors */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
+  --bg-primary: #1a252f;
+  --bg-secondary: #2c3e50;
+  --bg-tertiary: #34495e;
   
   /* Text Colors */
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-light: #94a3b8;
+  --text-primary: #ecf0f1;
+  --text-secondary: #bdc3c7;
+  --text-light: #95a5a6;
   
   /* Border & Shadow */
-  --border-color: #334155;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --border-color: #34495e;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
   
   /* Status Colors */
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
+  --success: #1abc9c;
+  --error: #e74c3c;
+  --warning: #f39c12;
+  --info: #3498db;
 }
 
 /* Mobile First - Base Styles */
@@ -112,5 +122,166 @@ body {
   .container {
     padding: 0 3rem;
   }
+}
+
+/* Card Theme Support */
+.card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+}
+
+.card-body {
+  padding: 1.5rem;
+  color: var(--text-primary);
+}
+
+.card-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.card-footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+}
+
+/* Table Theme Support - Override Bootstrap styles */
+.fixTableHead thead th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+}
+
+.fixTableHead tfoot th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-top: 2px solid var(--border-color) !important;
+}
+
+/* Table row theme support */
+.table tbody tr {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: var(--bg-secondary) !important;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: var(--bg-primary) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd):hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.table-striped tbody tr:nth-of-type(even):hover {
+  background-color: var(--bg-secondary) !important;
+}
+
+.table-bordered {
+  border: 1px solid var(--border-color);
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid var(--border-color);
+}
+
+.table th,
+.table td {
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+  background-color: inherit;
+}
+
+.table thead th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 2px solid var(--border-color) !important;
+}
+
+.table tfoot th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-top: 2px solid var(--border-color) !important;
+}
+
+/* Theme-Aware Scrollbar Styles */
+/* Webkit browsers (Chrome, Safari, Edge) */
+.table-fixed-wrapper::-webkit-scrollbar,
+.datagrid-table-wrapper::-webkit-scrollbar,
+.datagrid-scrollable::-webkit-scrollbar,
+.fixTableHead::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.table-fixed-wrapper::-webkit-scrollbar-track,
+.datagrid-table-wrapper::-webkit-scrollbar-track,
+.datagrid-scrollable::-webkit-scrollbar-track,
+.fixTableHead::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 5px;
+}
+
+.table-fixed-wrapper::-webkit-scrollbar-thumb,
+.datagrid-table-wrapper::-webkit-scrollbar-thumb,
+.datagrid-scrollable::-webkit-scrollbar-thumb,
+.fixTableHead::-webkit-scrollbar-thumb {
+  background: var(--tertiary-color);
+  border-radius: 5px;
+  border: 2px solid var(--bg-secondary);
+  transition: background 0.3s ease;
+}
+
+.table-fixed-wrapper::-webkit-scrollbar-thumb:hover,
+.datagrid-table-wrapper::-webkit-scrollbar-thumb:hover,
+.datagrid-scrollable::-webkit-scrollbar-thumb:hover,
+.fixTableHead::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+.table-fixed-wrapper::-webkit-scrollbar-corner,
+.datagrid-table-wrapper::-webkit-scrollbar-corner,
+.datagrid-scrollable::-webkit-scrollbar-corner,
+.fixTableHead::-webkit-scrollbar-corner {
+  background: var(--bg-secondary);
+}
+
+/* Firefox */
+.table-fixed-wrapper,
+.datagrid-table-wrapper,
+.datagrid-scrollable,
+.fixTableHead {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tertiary-color) var(--bg-secondary);
+}
+
+.table-fixed-wrapper:hover,
+.datagrid-table-wrapper:hover,
+.datagrid-scrollable:hover,
+.fixTableHead:hover {
+  scrollbar-color: var(--primary-color) var(--bg-secondary);
 }
 

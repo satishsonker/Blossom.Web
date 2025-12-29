@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const login = async (username, password, rememberMe = false) => {
-    return await apiService.post(API_ENDPOINTS.AUTH.LOGIN, { username, password })
+    return await apiService.post(API_ENDPOINTS.AUTH.LOGIN, { username, password }, { showToast: false })
       .then(response => {
         var userData = getJwtClaims(response.data?.data?.token);
         if(userData?.roles && typeof userData.roles==='string'){ 
@@ -64,9 +64,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const googleLogin = async (googleToken) => {
-    return await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_LOGIN, { token: googleToken })
+    return await apiService.post(API_ENDPOINTS.AUTH.GOOGLE_LOGIN, { token: googleToken }, { showToast: false })
       .then(response => {
         var userData = getJwtClaims(response.data?.data?.token);
+        if(userData?.roles && typeof userData.roles==='string'){ 
+          userData.roles =JSON.parse(userData.roles);
+        }
         setUser(userData);
         localStorage.setItem('token', JSON.stringify(response.data?.data));
         return { success: true, user: userData };
@@ -122,7 +125,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user && user.role === 'admin';
+    if (!user) return false;
+    // Check if user has role property (string)
+    if (user.role === 'admin') return true;
+    // Check if user has roles array with ADMIN RoleCode
+    if (user.roles && Array.isArray(user.roles)) {
+      return user.roles.some(role => role.RoleCode === 'ADMIN' || role.roleCode === 'ADMIN' || role === 'ADMIN');
+    }
+    return false;
   };
 
   const getToken = () => {

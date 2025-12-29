@@ -1,77 +1,117 @@
-/* Action Icons Animation */
-.table-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
+/* Professional Action Icon Animations */
 .table-actions div {
-    transition: all 0.2s ease-in-out;
     cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
 }
 
-/* Scale and background effect on hover */
-.table-actions div:hover {
-    transform: translateY(-2px);
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Specific animations for different action types */
+/* Smooth icon animations on hover */
 .table-actions .text-primary:hover i {
-    animation: pulse-primary 0.3s ease-in-out;
+    animation: iconPulse 0.4s ease-in-out;
+    color: var(--primary-color);
 }
 
 .table-actions .text-warning:hover i {
-    animation: pulse-warning 0.3s ease-in-out;
+    animation: iconPulse 0.4s ease-in-out;
+    color: var(--warning);
 }
 
 .table-actions .text-danger:hover i {
-    animation: pulse-danger 0.3s ease-in-out;
+    animation: iconPulse 0.4s ease-in-out;
+    color: var(--error);
 }
 
 .table-actions .text-success:hover i {
-    animation: pulse-success 0.3s ease-in-out;
+    animation: iconPulse 0.4s ease-in-out;
+    color: var(--success);
 }
 
-/* Pulse animations for different colors */
-@keyframes pulse-primary {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+.table-actions .text-info:hover i {
+    animation: iconPulse 0.4s ease-in-out;
+    color: var(--info);
 }
 
-@keyframes pulse-warning {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-@keyframes pulse-danger {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
-@keyframes pulse-success {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+/* Professional pulse animation */
+@keyframes iconPulse {
+    0% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.2);
+    }
+    100% { 
+        transform: scale(1.15);
+    }
 }
 
 /* Custom button animations */
 .table-actions div[class*="custom-"] i {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .table-actions div[class*="custom-"]:hover i {
-    animation: rotate-bounce 0.4s ease-in-out;
+    animation: iconRotate 0.5s ease-in-out;
 }
 
-@keyframes rotate-bounce {
-    0% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.1) rotate(5deg); }
-    75% { transform: scale(1.1) rotate(-5deg); }
-    100% { transform: scale(1) rotate(0deg); }
+@keyframes iconRotate {
+    0% { 
+        transform: scale(1) rotate(0deg);
+    }
+    25% { 
+        transform: scale(1.1) rotate(8deg);
+    }
+    75% { 
+        transform: scale(1.1) rotate(-8deg);
+    }
+    100% { 
+        transform: scale(1.15) rotate(0deg);
+    }
+}
+
+/* Tooltip enhancement */
+.table-actions > div[data-toggle="tooltip"] {
+    position: relative;
+}
+
+.table-actions > div[data-toggle="tooltip"]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.25rem 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+}
+
+.table-actions > div[data-toggle="tooltip"]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFadeIn 0.2s ease-in-out forwards;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
