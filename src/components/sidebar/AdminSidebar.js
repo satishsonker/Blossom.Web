@@ -1,9 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../styles/components/AdminSidebar.css';
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
+  const [expandedMenus, setExpandedMenus] = useState([]);
+
+  // Check if any child menu is active on mount
+  useEffect(() => {
+    const masterDataPaths = [
+      '/admin/master-data/classes',
+      '/admin/master-data/subjects',
+      '/admin/master-data/sections',
+      '/admin/master-data/subsections',
+      '/admin/master-data/mapping'
+    ];
+    
+    if (masterDataPaths.some(path => location.pathname.startsWith(path))) {
+      setExpandedMenus(['master-data']);
+    }
+  }, [location.pathname]);
+
+  const toggleMenu = (menuKey) => {
+    setExpandedMenus(prev => 
+      prev.includes(menuKey) 
+        ? prev.filter(key => key !== menuKey)
+        : [...prev, menuKey]
+    );
+  };
+
+  const isMenuActive = (item) => {
+    if (item.children) {
+      return item.children.some(child => location.pathname === child.path);
+    }
+    return location.pathname === item.path;
+  };
+
+  const isChildActive = (path) => {
+    return location.pathname === path;
+  };
 
   const menuItems = [
     { 
@@ -54,7 +89,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     },
     { 
       path: '/admin/master-data', 
-      label: 'Master Data', 
+      label: 'Master Data',
+      menuKey: 'master-data',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" strokeWidth="2" fill="none"/>
@@ -63,7 +99,29 @@ const AdminSidebar = ({ isOpen, onClose }) => {
           <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2"/>
           <polyline points="10 9 9 9 8 9" stroke="currentColor" strokeWidth="2" fill="none"/>
         </svg>
-      )
+      ),
+      children: [
+        { 
+          path: '/admin/master-data/classes', 
+          label: 'Classes' 
+        },
+        { 
+          path: '/admin/master-data/subjects', 
+          label: 'Subjects' 
+        },
+        { 
+          path: '/admin/master-data/sections', 
+          label: 'Sections' 
+        },
+        { 
+          path: '/admin/master-data/subsections', 
+          label: 'SubSections' 
+        },
+        { 
+          path: '/admin/master-data/mapping', 
+          label: 'Mapping' 
+        },
+      ]
     },
     { 
       path: '/admin/settings', 
@@ -84,15 +142,47 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         <nav className="sidebar-nav">
           <ul>
             {menuItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={location.pathname === item.path ? 'active' : ''}
-                  onClick={onClose}
-                >
-                  <span className="icon">{item.icon}</span>
-                  <span className="label">{item.label}</span>
-                </Link>
+              <li key={item.path || item.menuKey} className={item.children ? 'has-children' : ''}>
+                {item.children ? (
+                  <>
+                    <div
+                      className={`menu-item-parent ${isMenuActive(item) ? 'active' : ''} ${expandedMenus.includes(item.menuKey) ? 'expanded' : ''}`}
+                      onClick={() => toggleMenu(item.menuKey)}
+                    >
+                      <span className="icon">{item.icon}</span>
+                      <span className="label">{item.label}</span>
+                      <span className="arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <polyline points="6 9 12 15 18 9" stroke="currentColor" strokeWidth="2" fill="none"/>
+                        </svg>
+                      </span>
+                    </div>
+                    {expandedMenus.includes(item.menuKey) && (
+                      <ul className="submenu">
+                        {item.children.map((child) => (
+                          <li key={child.path}>
+                            <Link
+                              to={child.path}
+                              className={isChildActive(child.path) ? 'active' : ''}
+                              onClick={onClose}
+                            >
+                              <span className="submenu-label">{child.label}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className={location.pathname === item.path ? 'active' : ''}
+                    onClick={onClose}
+                  >
+                    <span className="icon">{item.icon}</span>
+                    <span className="label">{item.label}</span>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

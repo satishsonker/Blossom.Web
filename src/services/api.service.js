@@ -52,6 +52,14 @@ const showToast = (type, message, details = []) => {
   }
 };
 
+// Global logout callback
+let logoutCallback = null;
+
+// Set logout callback
+export const setLogoutCallback = (callback) => {
+  logoutCallback = callback;
+};
+
 // Get default headers
 const getHeaders = (customHeaders = {}, includeContentType = true) => {
   const headers = {
@@ -98,7 +106,24 @@ const handleResponse = async (response, showToastOnSuccess = true, customSuccess
     const errorMessage = data?.message || data?.error || MESSAGES.STATUS_MESSAGES[response.status] || MESSAGES.ERROR.GENERIC;
     const errorDetails = data?.errors || (data?.message ? [data.message] : []);
 
-    showToast('error', errorMessage, errorDetails);
+    // Handle 401 Unauthorized - logout and redirect to login
+    if (response.status === 401) {
+      const unauthorizedMessage = data?.message || data?.error || 'Your session has expired. Please login again.';
+      showToast('error', unauthorizedMessage, errorDetails);
+      
+      // Call logout callback if available
+      if (logoutCallback) {
+        logoutCallback();
+      }
+      
+      // Redirect to home page with a flag to show login popup
+      setTimeout(() => {
+        window.location.href = '/?sessionExpired=true';
+      }, 1500); // Small delay to show the toast message
+    } else {
+      showToast('error', errorMessage, errorDetails);
+    }
+    
     throw {
       status: response.status,
       message: errorMessage,

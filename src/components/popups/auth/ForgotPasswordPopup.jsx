@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import Inputbox from '../../common/Inputbox';
 import '../../../styles/components/auth/AuthPopup.css';
@@ -37,8 +38,8 @@ export default function ForgotPasswordPopup({ setShowForgotPasswordModal, onSwit
   };
 
   if (success) {
-    return (
-      <div className="modal-overlay" onClick={() => setShowForgotPasswordModal(false)}>
+    const successModalContent = (
+      <div className="auth-modal-overlay" onClick={() => setShowForgotPasswordModal(false)}>
         <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="auth-modal-header">
             <div style={{ 
@@ -76,10 +77,12 @@ export default function ForgotPasswordPopup({ setShowForgotPasswordModal, onSwit
         </div>
       </div>
     );
+
+    return createPortal(successModalContent, document.body);
   }
 
-  return (
-    <div className="modal-overlay" onClick={() => setShowForgotPasswordModal(false)}>
+  const modalContent = (
+    <div className="auth-modal-overlay" onClick={() => setShowForgotPasswordModal(false)}>
       <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
           <h2>Forgot Password</h2>
@@ -134,5 +137,7 @@ export default function ForgotPasswordPopup({ setShowForgotPasswordModal, onSwit
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 

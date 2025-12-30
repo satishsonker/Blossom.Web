@@ -59,6 +59,51 @@ const API_ENDPOINTS = {
     DELETE: (id) => `/master-data/${id}`,
     BULK_DELETE: '/master-data/bulk-delete',
   },
+
+  // Classes endpoints
+  CLASSES: {
+    LIST: '/Classes/GetAll',
+    GET_BY_ID: (id) => `/Classes/Get/${id}`,
+    CREATE: '/Classes/Create',
+    UPDATE: (id) => `/Classes/Update/${id}`,
+    DELETE: (id) => `/Classes/Delete/${id}`,
+  },
+
+  // Subjects endpoints
+  SUBJECTS: {
+    LIST: '/Subjects/GetAll',
+    GET_BY_ID: (id) => `/Subjects/Get/${id}`,
+    CREATE: '/Subjects/Create',
+    UPDATE: (id) => `/Subjects/Update/${id}`,
+    DELETE: (id) => `/Subjects/Delete/${id}`,
+  },
+
+  // Sections endpoints
+  SECTIONS: {
+    LIST: '/Sections/GetAll',
+    GET_BY_ID: (id) => `/Sections/Get/${id}`,
+    CREATE: '/Sections/Create',
+    UPDATE: (id) => `/Sections/Update/${id}`,
+    DELETE: (id) => `/Sections/Delete/${id}`,
+  },
+
+  // SubSections endpoints
+  SUBSECTIONS: {
+    LIST: '/SubSections/GetAll',
+    GET_BY_ID: (id) => `/SubSections/Get/${id}`,
+    CREATE: '/SubSections/Create',
+    UPDATE: (id) => `/SubSections/Update/${id}`,
+    DELETE: (id) => `/SubSections/Delete/${id}`,
+  },
+
+  // Mapping endpoints
+  MAPPING: {
+    LIST: '/ClassSubjectSectionSubSectionMappings/GetAll',
+    GET_BY_ID: (id) => `/ClassSubjectSectionSubSectionMappings/Get/${id}`,
+    CREATE: '/ClassSubjectSectionSubSectionMappings/Create',
+    UPDATE: (id) => `/ClassSubjectSectionSubSectionMappings/Update/${id}`,
+    DELETE: (id) => `/ClassSubjectSectionSubSectionMappings/Delete/${id}`,
+  },
 };
 
 export default API_ENDPOINTS;

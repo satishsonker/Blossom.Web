@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import Inputbox from '../../common/Inputbox';
 import '../../../styles/components/auth/AuthPopup.css';
@@ -105,8 +106,8 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
     }
   };
 
-  return (
-    <div className="modal-overlay" onClick={() => setShowSignupModal(false)}>
+  const modalContent = (
+    <div className="auth-modal-overlay" onClick={() => setShowSignupModal(false)}>
       <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
           <h2>Create Account</h2>
@@ -210,5 +211,7 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 

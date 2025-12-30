@@ -13,9 +13,15 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
       const initialFormData = {};
       fields.forEach(field => {
         if (initialData && mode === 'edit') {
-          initialFormData[field.name] = initialData[field.prop] || initialData[field.name] || '';
+          const value = initialData[field.prop] !== undefined ? initialData[field.prop] : (initialData[field.name] !== undefined ? initialData[field.name] : '');
+          // Convert boolean to string for select fields
+          if (field.type === 'select' && typeof value === 'boolean') {
+            initialFormData[field.name] = String(value);
+          } else {
+            initialFormData[field.name] = value || '';
+          }
         } else {
-          initialFormData[field.name] = field.type === 'select' ? (field.options?.[0]?.value || '') : '';
+          initialFormData[field.name] = field.type === 'select' ? (field.options?.[0]?.value !== undefined ? String(field.options[0].value) : '') : '';
         }
       });
       setFormData(initialFormData);
@@ -29,7 +35,9 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
     fields.forEach(field => {
       if (field.required) {
         const value = formData[field.name];
-        if (!value || (typeof value === 'string' && !value.trim())) {
+        // Check if value is empty (but allow false for booleans and 0 for numbers)
+        const isEmpty = value === undefined || value === null || value === '' || (typeof value === 'string' && !value.trim());
+        if (isEmpty) {
           newErrors[field.name] = `${field.label} is required`;
         }
       }
@@ -82,7 +90,17 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
       fields.forEach(field => {
         const value = formData[field.name];
         if (value !== undefined && value !== null && value !== '') {
-          apiData[field.prop] = field.type === 'number' ? parseFloat(value) : value;
+          if (field.type === 'number') {
+            apiData[field.prop] = parseFloat(value);
+          } else if (field.type === 'select' && (value === 'true' || value === 'false')) {
+            // Convert string boolean to actual boolean
+            apiData[field.prop] = value === 'true';
+          } else if (field.type === 'select' && !isNaN(value) && value !== '') {
+            // Convert string number to number for select fields (like IDs)
+            apiData[field.prop] = parseInt(value);
+          } else {
+            apiData[field.prop] = value;
+          }
         }
       });
 
@@ -131,12 +149,12 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
             <select
               id={field.name}
               name={field.name}
-              value={fieldValue}
+              value={String(fieldValue)}
               onChange={handleChange}
               className={fieldError ? 'error' : ''}
             >
               {field.options?.map(option => (
-                <option key={option.value} value={option.value}>
+                <option key={option.value} value={String(option.value)}>
                   {option.label}
                 </option>
               ))}

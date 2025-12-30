@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Inputbox from '../../common/Inputbox';
 import '../../../styles/components/auth/AuthPopup.css';
 
-export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwitchToForgotPassword }) {
+export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwitchToForgotPassword, isOpen = true }) {
   const { login, googleLogin, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [loginError, setLoginError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleGoogleCallback = async (response) => {
     setIsLoading(true);
@@ -90,8 +93,8 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
     }
   };
 
-  return (
-    <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
+  const modalContent = (
+    <div className="auth-modal-overlay" onClick={() => setShowLoginModal(false)}>
       <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
           <h2>Welcome Back</h2>
@@ -192,4 +195,6 @@ export default function LoginPopup({ setShowLoginModal, onSwitchToSignup, onSwit
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

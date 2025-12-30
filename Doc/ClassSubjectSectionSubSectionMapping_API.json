@@ -1,0 +1,191 @@
+{
+  "entity": "ClassSubjectSectionSubSectionMapping",
+  "baseUrl": "api/v1/ClassSubjectSectionSubSectionMappings",
+  "endpoints": [
+    {
+      "name": "Create Mapping",
+      "method": "POST",
+      "endpoint": "api/v1/ClassSubjectSectionSubSectionMappings/Create",
+      "description": "Creates a new mapping between Class, Subject, Section, and SubSection",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "classId": 1,
+          "subjectId": 1,
+          "sectionId": 1,
+          "subSectionId": 1
+        }
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "body": {
+            "data": {
+              "id": 1,
+              "classId": 1,
+              "subjectId": 1,
+              "sectionId": 1,
+              "subSectionId": 1,
+              "createdDate": "2024-01-15T10:30:00Z"
+            },
+            "errors": {},
+            "statusCode": 200
+          }
+        },
+        "error": {
+          "statusCode": 400,
+          "body": {
+            "data": null,
+            "errors": {
+              "classId": ["Class ID is required and must be greater than 0"],
+              "subjectId": ["Subject ID is required and must be greater than 0"],
+              "sectionId": ["Section ID is required and must be greater than 0"],
+              "subSectionId": ["Sub section ID is required and must be greater than 0"]
+            },
+            "statusCode": 400
+          }
+        }
+      }
+    },
+    {
+      "name": "Update Mapping",
+      "method": "PUT",
+      "endpoint": "api/v1/ClassSubjectSectionSubSectionMappings/Update/{id}",
+      "description": "Updates an existing mapping",
+      "parameters": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "description": "The ID of the mapping to update",
+          "example": 1
+        }
+      },
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "classId": 2,
+          "subjectId": 2,
+          "sectionId": 2,
+          "subSectionId": 2
+        }
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "body": {
+            "data": {
+              "id": 1,
+              "classId": 2,
+              "subjectId": 2,
+              "sectionId": 2,
+              "subSectionId": 2,
+              "createdDate": "2024-01-15T10:30:00Z"
+            },
+            "errors": {},
+            "statusCode": 200
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete Mapping",
+      "method": "DELETE",
+      "endpoint": "api/v1/ClassSubjectSectionSubSectionMappings/Delete/{id}",
+      "description": "Soft deletes a mapping",
+      "parameters": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "description": "The ID of the mapping to delete",
+          "example": 1
+        }
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "body": {
+            "data": true,
+            "errors": {},
+            "statusCode": 200
+          }
+        }
+      }
+    },
+    {
+      "name": "Get Mapping By ID",
+      "method": "GET",
+      "endpoint": "api/v1/ClassSubjectSectionSubSectionMappings/Get/{id}",
+      "description": "Retrieves a mapping by its ID",
+      "parameters": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "description": "The ID of the mapping",
+          "example": 1
+        }
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "body": {
+            "data": {
+              "id": 1,
+              "classId": 1,
+              "subjectId": 1,
+              "sectionId": 1,
+              "subSectionId": 1,
+              "createdDate": "2024-01-15T10:30:00Z"
+            },
+            "errors": {},
+            "statusCode": 200
+          }
+        }
+      }
+    },
+    {
+      "name": "Get All Mappings",
+      "method": "POST",
+      "endpoint": "api/v1/ClassSubjectSectionSubSectionMappings/GetAll",
+      "description": "Retrieves all mappings with pagination and search",
+      "request": {
+        "contentType": "application/json",
+        "body": {
+          "pageNumber": 1,
+          "pageSize": 10,
+          "searchTerm": ""
+        }
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "body": {
+            "data": [
+              {
+                "id": 1,
+                "classId": 1,
+                "subjectId": 1,
+                "sectionId": 1,
+                "subSectionId": 1,
+                "createdDate": "2024-01-15T10:30:00Z"
+              },
+              {
+                "id": 2,
+                "classId": 2,
+                "subjectId": 2,
+                "sectionId": 2,
+                "subSectionId": 2,
+                "createdDate": "2024-01-15T10:30:00Z"
+              }
+            ],
+            "pageNumber": 1,
+            "pageSize": 10,
+            "totalCount": 2,
+            "errors": {},
+            "statusCode": 200
+          }
+        }
+      }
+    }
+  ]
+}
+

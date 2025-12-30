@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoadingProvider from './components/loading/LoadingProvider';
 import ToastContainer from './components/toast/ToastContainer';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import AuthInterceptor from './components/common/AuthInterceptor';
 import PublicLayout from './components/layouts/PublicLayout';
 import AdminLayout from './components/layouts/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -16,6 +17,11 @@ import Users from './pages/admin/Users';
 import Products from './pages/admin/Products';
 import FileUpload from './pages/admin/FileUpload';
 import MasterData from './pages/admin/MasterData';
+import Classes from './pages/admin/Classes';
+import Subjects from './pages/admin/Subjects';
+import Sections from './pages/admin/Sections';
+import SubSections from './pages/admin/SubSections';
+import Mapping from './pages/admin/Mapping';
 import Settings from './pages/admin/Settings';
 import './styles/App.css';
 
@@ -36,6 +42,7 @@ function App() {
         <ErrorBoundary message="Theme Error">
           <AuthProvider>
             <ErrorBoundary message="Authentication Error">
+              <AuthInterceptor />
               <LoadingProvider>
                 <ErrorBoundary message="Loading Error">
                   <Router>
@@ -62,6 +69,11 @@ function App() {
                           <Route path="products" element={<Products />} />
                           <Route path="file-upload" element={<FileUpload />} />
                           <Route path="master-data" element={<MasterData />} />
+                          <Route path="master-data/classes" element={<Classes />} />
+                          <Route path="master-data/subjects" element={<Subjects />} />
+                          <Route path="master-data/sections" element={<Sections />} />
+                          <Route path="master-data/subsections" element={<SubSections />} />
+                          <Route path="master-data/mapping" element={<Mapping />} />
                           <Route path="settings" element={<Settings />} />
                           <Route index element={<Navigate to="/admin/dashboard" replace />} />
                         </Route>
