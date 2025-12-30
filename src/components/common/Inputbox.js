@@ -35,7 +35,7 @@ export default function Inputbox({ labelText, isRequired, type, name, labelTextH
     style = common.defaultIfEmpty(style, {});
     return (
         <>
-            {showLabel && <Label text={labelText} helpText={labelTextHelp} fontSize={labelFontSize} isRequired={isRequired}></Label>}
+            {showLabel && <Label text={labelText} helpText={labelTextHelp} htmlFor={id} fontSize={labelFontSize} isRequired={isRequired}></Label>}
             <div style={{position:'relative'}}>
             <input
                 maxLength={maxLength}
@@ -46,7 +46,7 @@ export default function Inputbox({ labelText, isRequired, type, name, labelTextH
                 value={value}
                 type={viewPassword?"text": type}
                 id={id}
-                className={overrideClass ? className : "form-control form-control-sm " + className}
+                className={overrideClass ? className : ("form-control form-control-sm " + className).trim()}
                 placeholder={placeholder}
                 disabled={disabled ? "disabled" : ""}
                 checked={checked}

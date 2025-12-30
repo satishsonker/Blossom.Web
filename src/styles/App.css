@@ -124,6 +124,9 @@ body {
   }
 }
 
+/* Import Form Controls Styles */
+@import './components/FormControls.css';
+
 /* Card Theme Support */
 .card {
   background-color: var(--bg-primary);

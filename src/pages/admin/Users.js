@@ -143,6 +143,7 @@ const Users = () => {
     pageNo: pageNo,
     setPageNo: setPageNo,
     setPageSize: setPageSize,
+    refreshData: refreshData,
     actions: {
       showView: true,
       showPrint: false,

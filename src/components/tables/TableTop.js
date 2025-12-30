@@ -1,11 +1,19 @@
 import React, { useRef } from 'react'
 import { common } from '../../utils/common';
 
-export default function TableTop({ handlePageSizeChange, searchHandler, sortBy, setSortBy, searchPlaceHolderText = "Enter minimum 3 charactor", showPaging = true, width = "auto", options, showSorting = true }) {
+export default function TableTop({ handlePageSizeChange, searchHandler, sortBy, setSortBy, searchPlaceHolderText = "Enter minimum 3 charactor", showPaging = true, width = "auto", options, showSorting = true, onRefresh }) {
     options = common.defaultIfEmpty(options, {});
     options.setSearchTerm = common.defaultIfEmpty(options.setSearchTerm, () => { });
     options.searchTerm = common.defaultIfEmpty(options.searchTerm, '');
     const inputRef = useRef(null);
+    
+    const handleRefresh = () => {
+        if (onRefresh) {
+            onRefresh();
+        } else if (options.refreshData) {
+            options.refreshData();
+        }
+    };
     const debounce = (wait) => {
         let timeoutId;
 
@@ -79,7 +87,22 @@ export default function TableTop({ handlePageSizeChange, searchHandler, sortBy, 
                 })} className={sortBy?.type == 'asc' ? "bi bi-sort-down mx-2 text-success" : 'bi bi-sort-up mx-2 text-danger'}></i>
             </div>}
             <div className={showSorting ? "col-4" : 'col-8'}>
-                <div id="example_filter" className="dataTables_filter" style={{ textAlign: "right" }}>
+                <div id="example_filter" className="dataTables_filter" style={{ textAlign: "right", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
+                    <button 
+                        type="button"
+                        onClick={handleRefresh}
+                        className="btn btn-sm btn-outline-secondary table-refresh-btn"
+                        title="Refresh"
+                        style={{ 
+                            padding: "0.25rem 0.5rem",
+                            fontSize: '12px',
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}
+                    >
+                        <i className="bi bi-arrow-clockwise"></i>
+                    </button>
                     <label style={{ fontWeight: "normal", textAlign: "right", whiteSpace: "nowrap", width: width, fontSize: '12px' }}>Search:
                         <input
                             style={{ marginLeft: "0.5em", display: "inline-block", width: width, fontSize: '12px' }}

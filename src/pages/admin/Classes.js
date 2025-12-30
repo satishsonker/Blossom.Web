@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
+import ButtonBox from '../../components/common/ButtonBox';
 import apiService from '../../services/api.service';
 import API_ENDPOINTS from '../../config/api.endpoints';
 import '../../styles/pages/admin/MasterData.css';
@@ -35,7 +36,6 @@ const Classes = () => {
   ];
 
   const tableHeaders = [
-    { name: 'ID', prop: 'id', action: { dAlign: 'center', hAlign: 'center' } },
     { name: 'Class Name', prop: 'className', action: { dAlign: 'left', hAlign: 'left' } },
     { name: 'Class Code', prop: 'classCode', action: { dAlign: 'center', hAlign: 'center' } },
     { name: 'Short Name', prop: 'classShortName', action: { dAlign: 'center', hAlign: 'center' } },
@@ -47,9 +47,8 @@ const Classes = () => {
         dAlign: 'center', 
         hAlign: 'center',
         customColumn: (dataRow) => {
-          const isActive = dataRow.isActive;
           return (
-            <span className={`status-badge ${isActive ? 'status-active' : 'status-inactive'}`}>
+            <span className={`status-badge ${dataRow.isActive==true ? 'status-active' : 'status-inactive'}`}>
               {isActive ? 'Active' : 'Inactive'}
             </span>
           );
@@ -129,6 +128,7 @@ const Classes = () => {
           pageNo: pageNo,
           setPageNo: setPageNo,
           setPageSize: setPageSize,
+          refreshData: refreshData,
           actions: {
             showView: false,
             showPrint: false,
@@ -163,16 +163,15 @@ const Classes = () => {
       
       <div className="master-data-header">
         <div>
-          <h1>Classes</h1>
+          <h4>Classes</h4>
           <p className="master-data-subtitle">Manage class entries with full CRUD operations</p>
         </div>
-        <button className="btn-create" onClick={handleCreate}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2"/>
-            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2"/>
-          </svg>
-          Add New
-        </button>
+        <ButtonBox
+          type="add"
+          onClickHandler={handleCreate}
+          className="btn-sm"
+          text="Add New"
+        />
       </div>
 
       <div className="master-data-content">

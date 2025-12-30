@@ -75,7 +75,17 @@ export default function TableView({ option }) {
                 <div className={option.tableInCard?"card-body":""}>
                     {
                         option.showTableTop &&
-                        <TableTop sortBy={sortBy} showSorting={option?.showSorting} setSortBy={setSortBy} options={option} searchPlaceHolderText={option.searchPlaceHolderText} width={option.searchBoxWidth} handlePageSizeChange={handlePageSizeChange} searchHandler={option.searchHandler}></TableTop>
+                        <TableTop 
+                            sortBy={sortBy} 
+                            showSorting={option?.showSorting} 
+                            setSortBy={setSortBy} 
+                            options={option} 
+                            searchPlaceHolderText={option.searchPlaceHolderText} 
+                            width={option.searchBoxWidth} 
+                            handlePageSizeChange={handlePageSizeChange} 
+                            searchHandler={option.searchHandler}
+                            onRefresh={option.refreshData}
+                        ></TableTop>
                     }
                     <div className="table-fixed-wrapper">
                         <div id="example_wrapper" className="dataTables_wrapper dt-bootstrap5">

@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import Inputbox from '../common/Inputbox';
+import Label from '../common/Label';
+import ErrorLabel from '../common/ErrorLabel';
+import Dropdown from '../common/Dropdown';
+import ButtonBox from '../common/ButtonBox';
 import '../../styles/components/Modal.css';
 import '../../styles/components/UserFormModal.css';
 
@@ -123,103 +128,103 @@ const UserFormModal = ({ isOpen, onClose, onSave, user = null, mode = 'create' }
       <div className="modal-content user-form-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{mode === 'create' ? 'Create New User' : 'Edit User'}</h2>
-          <button className="modal-close" onClick={onClose}>×</button>
+          <button className="modal-close" onClick={onClose} title="Close">×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="user-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="name">
-                Name <span className="required">*</span>
-              </label>
-              <input
+              <Inputbox
+                labelText="Name"
+                isRequired={true}
                 type="text"
-                id="name"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
-                className={errors.name ? 'error' : ''}
+                onChangeHandler={handleChange}
+                errorMessage={errors.name}
+                showError={true}
                 placeholder="Enter full name"
+                className={errors.name ? 'error' : ''}
               />
-              {errors.name && <span className="error-message">{errors.name}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">
-                Email <span className="required">*</span>
-              </label>
-              <input
+              <Inputbox
+                labelText="Email"
+                isRequired={true}
                 type="email"
-                id="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
-                className={errors.email ? 'error' : ''}
+                onChangeHandler={handleChange}
+                errorMessage={errors.email}
+                showError={true}
                 placeholder="Enter email address"
+                className={errors.email ? 'error' : ''}
               />
-              {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="role">
-                Role <span className="required">*</span>
-              </label>
-              <select
-                id="role"
+              <Label text="Role" isRequired={true} />
+              <Dropdown
                 name="role"
                 value={formData.role}
+                data={[
+                  { id: 'user', value: 'User' },
+                  { id: 'admin', value: 'Admin' },
+                  { id: 'moderator', value: 'Moderator' }
+                ]}
+                elementKey="id"
+                text="value"
                 onChange={handleChange}
+                defaultText="Select Role"
                 className={errors.role ? 'error' : ''}
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-                <option value="moderator">Moderator</option>
-              </select>
-              {errors.role && <span className="error-message">{errors.role}</span>}
+              />
+              <ErrorLabel message={errors.role} />
             </div>
 
             <div className="form-group">
-              <label htmlFor="status">
-                Status <span className="required">*</span>
-              </label>
-              <select
-                id="status"
+              <Label text="Status" isRequired={true} />
+              <Dropdown
                 name="status"
                 value={formData.status}
+                data={[
+                  { id: 'active', value: 'Active' },
+                  { id: 'inactive', value: 'Inactive' },
+                  { id: 'suspended', value: 'Suspended' }
+                ]}
+                elementKey="id"
+                text="value"
                 onChange={handleChange}
+                defaultText="Select Status"
                 className={errors.status ? 'error' : ''}
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="suspended">Suspended</option>
-              </select>
-              {errors.status && <span className="error-message">{errors.status}</span>}
+              />
+              <ErrorLabel message={errors.status} />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
+              <Inputbox
+                labelText="Phone"
+                isRequired={false}
                 type="tel"
-                id="phone"
                 name="phone"
                 value={formData.phone}
-                onChange={handleChange}
+                onChangeHandler={handleChange}
                 placeholder="Enter phone number"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="address">Address</label>
-              <input
+              <Inputbox
+                labelText="Address"
+                isRequired={false}
                 type="text"
-                id="address"
                 name="address"
                 value={formData.address}
-                onChange={handleChange}
+                onChangeHandler={handleChange}
                 placeholder="Enter address"
               />
             </div>
@@ -227,45 +232,52 @@ const UserFormModal = ({ isOpen, onClose, onSave, user = null, mode = 'create' }
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="password">
-                {mode === 'create' ? 'Password' : 'New Password'} {mode === 'create' && <span className="required">*</span>}
-              </label>
-              <input
+              <Inputbox
+                labelText={mode === 'create' ? 'Password' : 'New Password'}
+                isRequired={mode === 'create'}
                 type="password"
-                id="password"
                 name="password"
                 value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
+                onChangeHandler={handleChange}
+                errorMessage={errors.password}
+                showError={true}
                 placeholder={mode === 'create' ? 'Enter password' : 'Leave blank to keep current password'}
+                className={errors.password ? 'error' : ''}
               />
-              {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
 
             {formData.password && (
               <div className="form-group">
-                <label htmlFor="confirmPassword">
-                  Confirm Password <span className="required">*</span>
-                </label>
-                <input
+                <Inputbox
+                  labelText="Confirm Password"
+                  isRequired={true}
                   type="password"
-                  id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? 'error' : ''}
+                  onChangeHandler={handleChange}
+                  errorMessage={errors.confirmPassword}
+                  showError={true}
                   placeholder="Confirm password"
+                  className={errors.confirmPassword ? 'error' : ''}
                 />
-                {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
               </div>
             )}
           </div>
 
           <div className="form-actions">
-            <button type="button" onClick={onClose} className="btn-secondary" disabled={isSubmitting}>
-              Cancel
-            </button>
-            <button type="submit" className="btn-primary" disabled={isSubmitting}>
+            <ButtonBox
+              type="cancel"
+              onClickHandler={onClose}
+              className="btn-sm"
+              disabled={isSubmitting}
+              text="Cancel"
+            />
+            <button
+              type="submit"
+              className="btn btn-sm btn-info"
+              disabled={isSubmitting}
+            >
+              <i className={mode === 'edit' ? 'bi bi-arrow-clockwise' : 'bi bi-save'}></i>
               {isSubmitting ? 'Saving...' : mode === 'create' ? 'Create User' : 'Update User'}
             </button>
           </div>

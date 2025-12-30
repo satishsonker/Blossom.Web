@@ -92,7 +92,7 @@ const getHeaders = (customHeaders = {}, includeContentType = true) => {
 };
 
 // Handle response
-const handleResponse = async (response, showToastOnSuccess = true, customSuccessMessage = null) => {
+const handleResponse = async (response, showToastOnSuccess = true, customSuccessMessage = null, shouldShowToast = true) => {
   const contentType = response.headers.get('content-type');
   let data;
 
@@ -106,7 +106,7 @@ const handleResponse = async (response, showToastOnSuccess = true, customSuccess
     const errorMessage = data?.message || data?.error || MESSAGES.STATUS_MESSAGES[response.status] || MESSAGES.ERROR.GENERIC;
     const errorDetails = data?.errors || (data?.message ? [data.message] : []);
 
-    // Handle 401 Unauthorized - logout and redirect to login
+    // Handle 401 Unauthorized - always show toast (critical error)
     if (response.status === 401) {
       const unauthorizedMessage = data?.message || data?.error || 'Your session has expired. Please login again.';
       showToast('error', unauthorizedMessage, errorDetails);
@@ -120,7 +120,8 @@ const handleResponse = async (response, showToastOnSuccess = true, customSuccess
       setTimeout(() => {
         window.location.href = '/?sessionExpired=true';
       }, 1500); // Small delay to show the toast message
-    } else {
+    } else if (shouldShowToast) {
+      // Only show error toast if shouldShowToast is true (not for GET requests)
       showToast('error', errorMessage, errorDetails);
     }
     
@@ -132,9 +133,14 @@ const handleResponse = async (response, showToastOnSuccess = true, customSuccess
     };
   }
 
-  // Show success toast for POST, PUT, DELETE
-  if (showToastOnSuccess && (response.status === 201 || response.status === 200 || response.status === 204)) {
+  // Show success toast only for POST, PUT, DELETE and only if shouldShowToast is true
+  if (shouldShowToast && showToastOnSuccess && (response.status === 201 || response.status === 200 || response.status === 204)) {
     const method = response.config?.method?.toUpperCase();
+    // Don't show success toast for GET requests
+    if (method === 'GET') {
+      return data;
+    }
+    
     let message = customSuccessMessage;
 
     if (!message) {
@@ -192,7 +198,7 @@ const makeRequest = async (url, options = {}, showToastOnSuccess = true, customS
     // Store method in response for handleResponse
     response.config = { method };
 
-    const data = await handleResponse(response, shouldShowToast && showToastOnSuccess, customSuccessMessage);
+    const data = await handleResponse(response, showToastOnSuccess, customSuccessMessage, shouldShowToast);
 
     if (shouldShowLoading) {
       hideLoading();
@@ -230,9 +236,9 @@ const makeRequest = async (url, options = {}, showToastOnSuccess = true, customS
 
 // API Service
 const apiService = {
-  // GET request
+  // GET request - no toasts by default
   get: async (url, options = {}) => {
-    return makeRequest(url, { ...options, method: 'GET' }, false);
+    return makeRequest(url, { ...options, method: 'GET', showToast: false }, false);
   },
 
   // POST request

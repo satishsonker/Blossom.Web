@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import Inputbox from '../common/Inputbox';
+import Label from '../common/Label';
+import ErrorLabel from '../common/ErrorLabel';
+import Dropdown from '../common/Dropdown';
+import ButtonBox from '../common/ButtonBox';
 import '../../styles/components/Modal.css';
 import '../../styles/components/UserFormModal.css';
 
@@ -122,84 +127,85 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
       case 'textarea':
         return (
           <div key={field.name} className="form-group">
-            <label htmlFor={field.name}>
-              {field.label}
-              {field.required && <span className="required">*</span>}
-            </label>
-            <textarea
-              id={field.name}
+            <Inputbox
+              labelText={field.label}
+              isRequired={field.required}
+              type="text"
               name={field.name}
               value={fieldValue}
-              onChange={handleChange}
-              rows={4}
-              className={fieldError ? 'error' : ''}
+              onChangeHandler={handleChange}
+              errorMessage={fieldError}
+              showError={true}
               placeholder={`Enter ${field.label.toLowerCase()}`}
+              className={fieldError ? 'error' : ''}
             />
-            {fieldError && <span className="error-message">{fieldError}</span>}
           </div>
         );
 
       case 'select':
+        const dropdownData = field.options?.map(opt => ({
+          id: String(opt.value),
+          value: opt.label
+        })) || [];
         return (
           <div key={field.name} className="form-group">
-            <label htmlFor={field.name}>
-              {field.label}
-              {field.required && <span className="required">*</span>}
-            </label>
-            <select
-              id={field.name}
+            <Label text={field.label} isRequired={field.required} />
+            <Dropdown
               name={field.name}
               value={String(fieldValue)}
-              onChange={handleChange}
+              data={dropdownData}
+              elementKey="id"
+              text="value"
+              onChange={(e) => {
+                const newEvent = {
+                  target: {
+                    name: field.name,
+                    value: e.target.value
+                  }
+                };
+                handleChange(newEvent);
+              }}
+              defaultText={`Select ${field.label}`}
               className={fieldError ? 'error' : ''}
-            >
-              {field.options?.map(option => (
-                <option key={option.value} value={String(option.value)}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            {fieldError && <span className="error-message">{fieldError}</span>}
+            />
+            <ErrorLabel message={fieldError} />
           </div>
         );
 
       case 'number':
         return (
           <div key={field.name} className="form-group">
-            <label htmlFor={field.name}>
-              {field.label}
-              {field.required && <span className="required">*</span>}
-            </label>
-            <input
+            <Inputbox
+              labelText={field.label}
+              isRequired={field.required}
               type="number"
-              id={field.name}
               name={field.name}
               value={fieldValue}
-              onChange={handleChange}
-              className={fieldError ? 'error' : ''}
+              onChangeHandler={handleChange}
+              errorMessage={fieldError}
+              showError={true}
               placeholder={`Enter ${field.label.toLowerCase()}`}
+              className={fieldError ? 'error' : ''}
             />
-            {fieldError && <span className="error-message">{fieldError}</span>}
           </div>
         );
 
       default:
         return (
           <div key={field.name} className="form-group">
-            <label htmlFor={field.name}>
-              {field.label}
-              {field.required && <span className="required">*</span>}
-            </label>
-            <input
+            <Inputbox
+              labelText={field.label}
+              isRequired={field.required}
               type={field.type || 'text'}
-              id={field.name}
               name={field.name}
+              id={field.name}
               value={fieldValue}
-              onChange={handleChange}
-              className={fieldError ? 'error' : ''}
+              onChangeHandler={handleChange}
+              errorMessage={fieldError}
+              showError={true}
               placeholder={`Enter ${field.label.toLowerCase()}`}
+              className={fieldError ? 'error' : ''}
             />
-            {fieldError && <span className="error-message">{fieldError}</span>}
           </div>
         );
     }
@@ -210,7 +216,7 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
       <div className="modal-content user-form-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{mode === 'edit' ? 'Edit Master Data' : 'Create Master Data'}</h2>
-          <button className="modal-close" onClick={onClose}>×</button>
+          <button className="modal-close" onClick={onClose} title="Close">×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="user-form">
@@ -219,20 +225,20 @@ const MasterDataFormModal = ({ isOpen, onClose, onSave, fields = [], initialData
           </div>
 
           <div className="form-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn-secondary"
+            <ButtonBox
+              type="cancel"
+              onClickHandler={onClose}
+              className="btn-sm"
               disabled={isSubmitting}
-            >
-              Cancel
-            </button>
+              text="Cancel"
+            />
             <button
               type="submit"
-              className="btn-primary"
+              className="btn btn-sm btn-info"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Saving...' : mode === 'edit' ? 'Update' : 'Create'}
+              <i className={mode === 'edit' ? 'bi bi-arrow-clockwise' : 'bi bi-save'}></i>
+              {isSubmitting ? 'Saving...' : (mode === 'edit' ? 'Update' : 'Create')}
             </button>
           </div>
         </form>
