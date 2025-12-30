@@ -10,6 +10,7 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
     name: '', 
     email: '', 
     password: '', 
+    username: '',
     confirmPassword: '' 
   });
   const [signupError, setSignupError] = useState('');
@@ -71,7 +72,7 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
     setIsLoading(true);
 
     // Validation
-    if (!signupForm.name || !signupForm.email || !signupForm.password || !signupForm.confirmPassword) {
+    if (!signupForm.name || !signupForm.username || !signupForm.email || !signupForm.password || !signupForm.confirmPassword) {
       setSignupError('Please fill in all fields');
       setIsLoading(false);
       return;
@@ -88,11 +89,17 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
       setIsLoading(false);
       return;
     }
+    if (signupForm.username.length < 6) {
+      setSignupError('Username must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
 
     const result = await signup({
       name: signupForm.name,
       email: signupForm.email,
       password: signupForm.password,
+      username: signupForm.username
     });
 
     setIsLoading(false);
@@ -147,6 +154,18 @@ export default function SignupPopup({ setShowSignupModal, onSwitchToLogin, onSwi
               onChangeHandler={handleTextChange}
               labelText="Email"
               placeholder="Enter your email"
+            />
+          </div>
+
+          <div className="form-group">
+            <Inputbox
+              type="text"
+              name="username"
+              value={signupForm.username}
+              isRequired={true}
+              onChangeHandler={handleTextChange}
+              labelText="Username"
+              placeholder="Enter your username"
             />
           </div>
 

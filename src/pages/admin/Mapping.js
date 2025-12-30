@@ -90,37 +90,21 @@ const Mapping = () => {
 
   const tableHeaders = [
     { name: 'ID', prop: 'id', action: { dAlign: 'center', hAlign: 'center' } },
-    { name: 'Class', prop: 'classId', action: { 
+    { name: 'Class', prop: 'className', action: { 
       dAlign: 'left', 
       hAlign: 'left',
-      customColumn: (dataRow) => {
-        const classItem = classes.find(c => c.id === dataRow.classId);
-        return classItem ? `${classItem.className} (${classItem.classCode})` : dataRow.classId;
-      }
     }},
-    { name: 'Subject', prop: 'subjectId', action: { 
+    { name: 'Subject', prop: 'subjectName', action: { 
       dAlign: 'left', 
       hAlign: 'left',
-      customColumn: (dataRow) => {
-        const subjectItem = subjects.find(s => s.id === dataRow.subjectId);
-        return subjectItem ? `${subjectItem.subjectName} (${subjectItem.subjectCode})` : dataRow.subjectId;
-      }
     }},
-    { name: 'Section', prop: 'sectionId', action: { 
+    { name: 'Section', prop: 'sectionName', action: { 
       dAlign: 'left', 
       hAlign: 'left',
-      customColumn: (dataRow) => {
-        const sectionItem = sections.find(s => s.id === dataRow.sectionId);
-        return sectionItem ? `${sectionItem.sectionName} (${sectionItem.sectionCode})` : dataRow.sectionId;
-      }
     }},
-    { name: 'SubSection', prop: 'subSectionId', action: { 
+    { name: 'SubSection', prop: 'subSectionName', action: { 
       dAlign: 'left', 
       hAlign: 'left',
-      customColumn: (dataRow) => {
-        const subsectionItem = subsections.find(s => s.id === dataRow.subSectionId);
-        return subsectionItem ? `${subsectionItem.subSectionName} (${subsectionItem.subSectionCode})` : dataRow.subSectionId;
-      }
     }},
   ];
 

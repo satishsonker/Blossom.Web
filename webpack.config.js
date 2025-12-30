@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 require('dotenv').config();
 
 module.exports = (env, argv) => {
@@ -48,6 +49,21 @@ module.exports = (env, argv) => {
           REACT_APP_API_BASE_URL: REACT_APP_API_BASE_URL,
           REACT_APP_GOOGLE_CLIENT_ID: REACT_APP_GOOGLE_CLIENT_ID,
         }),
+      }),
+      // Copy public assets to dist folder
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: 'public/assets',
+            to: 'assets',
+            noErrorOnMissing: true,
+          },
+          {
+            from: 'public/manifest.json',
+            to: 'manifest.json',
+            noErrorOnMissing: true,
+          },
+        ],
       }),
     ],
     resolve: {
